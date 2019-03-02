@@ -3,11 +3,13 @@ services:
   - docker
 before_install:
   - openssl aes-256-cbc -K $encrypted_98d846315882_key -iv $encrypted_98d846315882_iv
-    -in travis-service-account.json.enc -out ./config/travis-service-account.json -d
+    -in travis-service-account.json.enc -out travis-service-account.json -d
   - docker build -t darioielardi/docker-react -f Dockerfile.dev .
 script:
   - docker run darioielardi/docker-react npm run test -- --coverage
 deploy:
   provider: gae
-  keyfile: ./config/travis-service-account.json
+  skip_cleanup: true
+  keyfile: travis-service-account.json
   project: docker-course-233316
+  default: true
